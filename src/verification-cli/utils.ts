@@ -58,35 +58,49 @@ export const getPathToBinaries = async ({
   version: string;
 }) => {
   const platform = getPlatform();
-
-  if (fs.existsSync(pathToVerificationApp)) {
-    return pathToVerificationApp;
+  const isWindows = os.platform() === "win32";
+  const pathWithExtension = `${pathToVerificationApp}${isWindows ? ".exe" : ""}`;
+  if (fs.existsSync(pathWithExtension)) {
+    debugger;
+    return pathWithExtension;
   }
   console.log(`Downloading everscan-verify@${version} app...`);
   const repo_url = "https://github.com/broxus/everscan-verify";
   const appName = "everscan-verify";
   const url = `${repo_url}/releases/download/v${version}/${appName}-v${version}-${platform}.tar.gz`;
   const pathToGzippedFile = `${pathToVerificationApp}.tar.gz`;
-  await download(url, pathToGzippedFile);
+  await download(url, pathToGzippedFile).catch((e) => {
+    throw new Error(`Downloading everscan-verify error\n fetch url: ${url}\n ${e.message}`);
+  });
   fs.ensureDirSync(pathToVerificationApp);
   try {
     await tar.x({
       cwd: pathToVerificationApp,
       file: pathToGzippedFile,
     });
-
+    debugger;
     fs.rmSync(pathToGzippedFile);
-    fs.moveSync(path.resolve(pathToVerificationApp, "dist", "everscan-verify"), pathToVerificationApp + "temp");
+    debugger;
+    fs.moveSync(
+      path.resolve(pathToVerificationApp, "dist", `everscan-verify${isWindows ? ".exe" : ""}`),
+      pathToVerificationApp + "temp",
+    );
+    debugger;
     fs.rmSync(pathToVerificationApp, { recursive: true });
-    fs.moveSync(pathToVerificationApp + "temp", pathToVerificationApp);
-    fs.chmodSync(pathToVerificationApp, "755");
+    debugger;
+    fs.moveSync(pathToVerificationApp + "temp", pathWithExtension);
+    debugger;
+    fs.chmodSync(pathWithExtension, "755");
+    debugger;
+    console.log(`Everscan-verify@${version} was downloaded`);
 
-    console.log(`Everscan-verify@${version} has downloaded`);
-
-    return pathToVerificationApp;
+    return pathWithExtension;
+    debugger;
   } catch (e) {
-    fs.rmSync(pathToGzippedFile);
     console.log(`Downloading error`);
+    try {
+      fs.rmSync(pathToGzippedFile);
+    } catch (e) {}
 
     throw new Error(e as string);
   }
@@ -127,13 +141,15 @@ export const getCompilerHash = async ({
   let compilerToHashMap = JSON.parse(fs.readFileSync(compilerToHashMapPath, "utf-8")) as Record<string, string>;
   if (!compilerToHashMap[compilerVersion]) {
     console.log(`Finding hash for compiler ${compilerVersion} ...`);
-    compilerToHashMap = await getHashToCompilerMap();
+    compilerToHashMap = await getHashToCompilerMap().catch((e) => {
+      throw new Error(`Fetch compiler hashes error ${e}`);
+    });
     if (!compilerToHashMap[compilerVersion]) {
       throw new Error("Compiler not exists, please check your locklift.config and the compiler version");
     }
     console.log(`Found hash ${compilerToHashMap[compilerVersion]} for compiler ${compilerVersion}`);
 
-    fs.writeFileSync(compilerToHashMapPath, JSON.stringify(compilerToHashMapPath));
+    fs.writeFileSync(compilerToHashMapPath, JSON.stringify(compilerToHashMap));
   }
   return compilerToHashMap[compilerVersion];
 };

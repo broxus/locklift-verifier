@@ -22,8 +22,11 @@ addPlugin({
             compilerVersion: config.compiler.version as unknown as string,
             apiKey: option.config().verificationPlugin.apiKey,
             secret: option.config().verificationPlugin.secretKey,
+            license: option.config().verificationPlugin.license || "AGPL-3.0-or-later",
           });
+          debugger;
           await verificationApp.verify({ contractsPath: option.contracts });
+          process.exit(0);
         }),
     },
   ],

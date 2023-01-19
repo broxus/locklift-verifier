@@ -16,6 +16,7 @@ const config: LockliftConfig = {
         version: "1.6.10",
         apiKey: "APIKEY",
         secretKey: "SECRET",
+       // license: "AGPL-3.0-or-later", <- this is default value and can be overrided
     },
   ///////////////////
 }
@@ -23,7 +24,7 @@ const config: LockliftConfig = {
 
 ## Usage
 ```shell
-npx locklift -n local verify
+npx locklift verify
 ```
 Example output
 ```text

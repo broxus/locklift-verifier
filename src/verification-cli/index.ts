@@ -2,7 +2,7 @@ import envPaths from "env-paths";
 import { getCompilerHash, getPathToBinaries, getPlatform, getSupportedCompilers } from "./utils";
 import path from "path";
 import * as fs from "fs-extra";
-import { exec } from "child_process";
+import { exec, execSync } from "child_process";
 
 export class VerificationCli {
   constructor(
@@ -11,20 +11,22 @@ export class VerificationCli {
     private readonly linkerVersion: string,
     private readonly apiKey: string,
     private readonly secret: string,
+    private readonly license: string,
   ) {}
 
   verify = async ({ contractsPath }: { contractsPath?: string }) => {
     const child = exec(
-      `${this.pathToBinary} verify -i ${contractsPath || "contracts"} --license 'AGPL-3.0-or-later' --api-key ${
+      `${this.pathToBinary} verify -i ${contractsPath || "contracts"} --license ${this.license} --api-key ${
         this.apiKey
       } --secret ${this.secret}  --compiler-version ${this.compilerHash} --linker-version ${
         this.linkerVersion
       } -I node_modules --compile-all --assume-yes`,
     );
-    child.stdout?.on("data", console.log);
+
     await new Promise((r, e) => {
-      child.on("close", r);
-      child.on("error", e);
+      child.stdout?.on("data", console.log);
+      child.stderr?.on("error", e);
+      child.stdout?.on("close", r);
     });
   };
 }
@@ -35,18 +37,23 @@ export const getVerificationApp = async ({
   linkerVersion,
   secret,
   apiKey,
+  license,
 }: {
   version: string;
   compilerVersion: string;
   linkerVersion: string;
   apiKey: string;
   secret: string;
+  license: string;
 }) => {
   const verificationPathsRootPath = envPaths("loclift_verification").cache;
+  fs.ensureDirSync(verificationPathsRootPath);
   // Check compiler
   const compilerToHashMapPath = path.resolve(verificationPathsRootPath, "compiler-to-commit.json");
   const compilerHash = await getCompilerHash({ compilerToHashMapPath, compilerVersion });
-  const { compilers, linkers } = await getSupportedCompilers();
+  const { compilers, linkers } = await getSupportedCompilers().catch((e) => {
+    throw new Error(`Fetch supported compilers error ${e}`);
+  });
 
   const isCompilerSupported = compilers.some((compiler) => compiler === compilerHash);
   if (!isCompilerSupported) {
@@ -67,5 +74,5 @@ export const getVerificationApp = async ({
     pathToVerificationApp: pathToVerificationApp,
     version,
   });
-  return new VerificationCli(pathToBinaries, compilerHash, linkerVersion, apiKey, secret);
+  return new VerificationCli(pathToBinaries, compilerHash, linkerVersion, apiKey, secret, license);
 };

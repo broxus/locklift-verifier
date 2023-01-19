@@ -7,6 +7,7 @@ const main = async () => {
     linkerVersion: "",
     apiKey: "ltiXLqM8q1",
     secret: "YhbJHWLH57gspZhh9kDU",
+    license: "AGPL-3.0-or-later",
   });
 };
 

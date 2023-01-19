@@ -5,6 +5,7 @@ type LockliftConfigExtension = {
     version: string;
     apiKey: string;
     secretKey: string;
+    license?: string;
   };
 };
 
