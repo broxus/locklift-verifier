@@ -5,8 +5,8 @@ const main = async () => {
     version: "1.6.8",
     compilerVersion: "",
     linkerVersion: "",
-    apiKey: "ltiXLqM8q1",
-    secret: "YhbJHWLH57gspZhh9kDU",
+    apiKey: "***",
+    secret: "***",
     license: "AGPL-3.0-or-later",
   });
 };
