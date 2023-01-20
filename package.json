@@ -1,15 +1,27 @@
 {
-  "name": "locklift-verification-plugin",
-  "version": "0.0.1",
-  "description": "",
+  "name": "locklift-verifier",
+  "version": "1.0.0",
+  "description": "Locklift plugin for integration with Everscan contract verification service",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --build .",
     "start": "ts-node --transpile-only src/index.ts",
-    "start-dev": "ts-node --transpile-only src/index-dev.ts"
+    "start-dev": "ts-node --transpile-only src/index-dev.ts",
+    "prepublishOnly": "npm run build"
   },
   "author": "",
-  "license": "ISC",
+  "keywords": [
+    "Everscale",
+    "blockchain",
+    "smart-contracts",
+    "javascript",
+    "solidity",
+    "dapps",
+    "ethereum",
+    "locklift",
+    "plugin"
+  ],
+  "license": "Apache-2.0",
   "dependencies": {
     "@types/commander": "^2.12.2",
     "@types/fs-extra": "^11.0.1",

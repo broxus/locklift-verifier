@@ -3,4 +3,4 @@
 /.idea/
 /workFiles/
 ./config.json
-
+build/
