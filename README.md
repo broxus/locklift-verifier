@@ -1,15 +1,26 @@
 # Locklift Verification plugin
 
+<p align="center">
+    <p align="center">
+        <a href="/LICENSE">
+            <img alt="GitHub" src="https://img.shields.io/badge/license-Apache--2.0-orange" />
+        </a>
+        <a href="https://www.npmjs.com/package/locklift-verifier">
+            <img alt="npm" src="https://img.shields.io/npm/v/locklift-verifier">
+        </a>
+    </p>
+</p>
+
 
 ## install
 Inside the locklift project
 ```shell
-npm i locklift-verification-plugin
+npm i locklift-verifier
 ```
 
 Inside the locklift.config.ts
 ```typescript
-import "verification-plugin";
+import "locklift-verifier";
 
 const config: LockliftConfig = {
     verificationPlugin: {
@@ -35,9 +46,6 @@ Example output
 ╞════════════════════════════════╪══════════════════════════════════════════════════════════════════╡
 │ /app/contracts/src/Sample.tsol ┆ a47ca4e6f055804482d01eeb65bc4a4d6aff83fd3cb703da3ff3569480b3c6e1 │
 ╰────────────────────────────────┴──────────────────────────────────────────────────────────────────╯
-
-
-
 ```
 
 
