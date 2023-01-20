@@ -12,7 +12,7 @@
 </p>
 
 
-## install
+## Install
 Inside the locklift project
 ```shell
 npm i locklift-verifier
@@ -24,7 +24,7 @@ import "locklift-verifier";
 
 const config: LockliftConfig = {
     verificationPlugin: {
-        version: "1.6.10",
+        version: "1.6.12", // contract verifier binary, see https://github.com/broxus/everscan-verify
         apiKey: "APIKEY",
         secretKey: "SECRET",
        // license: "AGPL-3.0-or-later", <- this is default value and can be overrided
