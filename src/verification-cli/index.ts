@@ -31,7 +31,10 @@ export class VerificationCli {
 
     await new Promise((r, e) => {
       child.stdout?.on("data", (data) => {
-        debugger;
+        if (data.includes("Waiting for verification")) {
+          process.stdout.moveCursor(0, -1);
+          process.stdout.clearLine(1);
+        }
         console.log(data);
       });
 
