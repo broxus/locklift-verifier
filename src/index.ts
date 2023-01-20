@@ -17,14 +17,13 @@ addPlugin({
             throw new Error("The verification plugin supports only explicitly provided linker and compiler version");
           }
           const verificationApp = await getVerificationApp({
-            version: option.config().verificationPlugin.version,
+            version: option.config().verification.verifierVersion,
             linkerVersion: config.linker.version as unknown as string,
             compilerVersion: config.compiler.version as unknown as string,
-            apiKey: option.config().verificationPlugin.apiKey,
-            secret: option.config().verificationPlugin.secretKey,
-            license: option.config().verificationPlugin.license || "AGPL-3.0-or-later",
+            apiKey: option.config().verification.apiKey,
+            secret: option.config().verification.secretKey,
+            license: option.config().verification.license || "AGPL-3.0-or-later",
           });
-          debugger;
           await verificationApp.verify({ contractsPath: option.contracts });
           process.exit(0);
         }),

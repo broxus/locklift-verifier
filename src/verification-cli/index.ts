@@ -1,5 +1,11 @@
 import envPaths from "env-paths";
-import { getCompilerHash, getPathToBinaries, getPlatform, getSupportedCompilers } from "./utils";
+import {
+  getCompilerHash,
+  getPathToBinaries,
+  getPlatform,
+  getSupportedCompilers,
+  getVerificationAppReleases,
+} from "./utils";
 import path from "path";
 import * as fs from "fs-extra";
 import { exec, execSync } from "child_process";
@@ -24,7 +30,11 @@ export class VerificationCli {
     );
 
     await new Promise((r, e) => {
-      child.stdout?.on("data", console.log);
+      child.stdout?.on("data", (data) => {
+        debugger;
+        console.log(data);
+      });
+
       child.stderr?.on("error", e);
       child.stdout?.on("close", r);
     });
@@ -39,7 +49,7 @@ export const getVerificationApp = async ({
   apiKey,
   license,
 }: {
-  version: string;
+  version: "latest" | `${string}.${string}.${string}`;
   compilerVersion: string;
   linkerVersion: string;
   apiKey: string;
@@ -48,6 +58,11 @@ export const getVerificationApp = async ({
 }) => {
   const verificationPathsRootPath = envPaths("loclift_verification").cache;
   fs.ensureDirSync(verificationPathsRootPath);
+  const releases = await getVerificationAppReleases();
+  const verificationVersion = version === "latest" ? releases[0] : releases.find((el) => el === version);
+  if (!verificationVersion) {
+    throw new Error(`Not found verification app version ${version}\n supported versions: ${releases.join(", ")}`);
+  }
   // Check compiler
   const compilerToHashMapPath = path.resolve(verificationPathsRootPath, "compiler-to-commit.json");
   const compilerHash = await getCompilerHash({ compilerToHashMapPath, compilerVersion });
@@ -66,13 +81,13 @@ export const getVerificationApp = async ({
 
   const platform = getPlatform();
 
-  const pathToVerificationApp = path.resolve(`${verificationPathsRootPath}/${version}/${platform}`);
+  const pathToVerificationApp = path.resolve(`${verificationPathsRootPath}/${verificationVersion}/${platform}`);
 
-  fs.ensureDirSync(`${verificationPathsRootPath}/${version}`);
+  fs.ensureDirSync(`${verificationPathsRootPath}/${verificationVersion}`);
 
   const pathToBinaries = await getPathToBinaries({
     pathToVerificationApp: pathToVerificationApp,
-    version,
+    version: verificationVersion,
   });
   return new VerificationCli(pathToBinaries, compilerHash, linkerVersion, apiKey, secret, license);
 };

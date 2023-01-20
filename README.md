@@ -9,11 +9,11 @@ npm i locklift-verification-plugin
 
 Inside the locklift.config.ts
 ```typescript
-import "verification-plugin";
+import "locklift-verification-plugin";
 
 const config: LockliftConfig = {
     verificationPlugin: {
-        version: "1.6.10",
+        version: "latest", // or can be explicitly specified from this page `https://github.com/broxus/everscan-verify/releases`
         apiKey: "APIKEY",
         secretKey: "SECRET",
        // license: "AGPL-3.0-or-later", <- this is default value and can be overrided

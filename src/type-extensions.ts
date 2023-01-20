@@ -1,8 +1,8 @@
 export const PLUGIN_NAME = "verificationPlugin" as const;
 
 type LockliftConfigExtension = {
-  verificationPlugin: {
-    version: string;
+  verification: {
+    verifierVersion: "latest" | `${string}.${string}.${string}`;
     apiKey: string;
     secretKey: string;
     license?: string;

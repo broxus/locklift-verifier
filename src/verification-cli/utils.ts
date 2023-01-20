@@ -40,16 +40,17 @@ export async function download(fileUrl: string, outputLocationPath: string) {
             resolve(true);
           }
         });
-        debugger;
       });
     })
     .catch(async (e) => {
-      debugger;
       await fs.unlink(outputLocationPath);
       throw e;
     });
 }
-
+export const getVerificationAppReleases = (): Promise<Array<string>> => {
+  const url = `https://api.github.com/repos/broxus/everscan-verify/releases`;
+  return axios.get<Array<{ tag_name: string }>>(url).then((res) => res.data.map((el) => el.tag_name.replace("v", "")));
+};
 export const getPathToBinaries = async ({
   pathToVerificationApp,
   version,
@@ -61,7 +62,6 @@ export const getPathToBinaries = async ({
   const isWindows = os.platform() === "win32";
   const pathWithExtension = `${pathToVerificationApp}${isWindows ? ".exe" : ""}`;
   if (fs.existsSync(pathWithExtension)) {
-    debugger;
     return pathWithExtension;
   }
   console.log(`Downloading everscan-verify@${version} app...`);
@@ -78,24 +78,18 @@ export const getPathToBinaries = async ({
       cwd: pathToVerificationApp,
       file: pathToGzippedFile,
     });
-    debugger;
     fs.rmSync(pathToGzippedFile);
     debugger;
     fs.moveSync(
       path.resolve(pathToVerificationApp, "dist", `everscan-verify${isWindows ? ".exe" : ""}`),
       pathToVerificationApp + "temp",
     );
-    debugger;
     fs.rmSync(pathToVerificationApp, { recursive: true });
-    debugger;
     fs.moveSync(pathToVerificationApp + "temp", pathWithExtension);
-    debugger;
     fs.chmodSync(pathWithExtension, "755");
-    debugger;
     console.log(`Everscan-verify@${version} was downloaded`);
 
     return pathWithExtension;
-    debugger;
   } catch (e) {
     console.log(`Downloading error`);
     try {
