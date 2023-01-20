@@ -23,8 +23,8 @@ Inside the locklift.config.ts
 import "locklift-verifier";
 
 const config: LockliftConfig = {
-    verificationPlugin: {
-        version: "1.6.12", // contract verifier binary, see https://github.com/broxus/everscan-verify
+    verifier: {
+        verifierVersion: "latest", // contract verifier binary, see https://github.com/broxus/everscan-verify/releases
         apiKey: "APIKEY",
         secretKey: "SECRET",
        // license: "AGPL-3.0-or-later", <- this is default value and can be overrided
