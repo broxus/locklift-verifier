@@ -1,6 +1,6 @@
 {
   "name": "locklift-verifier",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Locklift plugin for integration with Everscan contract verification service",
   "main": "dist/index.js",
   "scripts": {
