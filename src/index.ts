@@ -1,8 +1,8 @@
-import "./type-extensions";
 export * from "./type-extensions";
-import { addPlugin, ExtenderActionParams } from "locklift/plugins";
+import "./type-extensions";
 import "locklift";
 import { PLUGIN_NAME } from "./type-extensions";
+import { addPlugin, ExtenderActionParams } from "locklift/plugins";
 import { getVerificationApp } from "./verification-cli";
 
 addPlugin({

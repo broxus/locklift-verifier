@@ -5,6 +5,7 @@ import {
   getPlatform,
   getSupportedCompilers,
   getVerificationAppReleases,
+  tryToGetNodeModules,
 } from "./utils";
 import path from "path";
 import * as fs from "fs-extra";
@@ -24,9 +25,9 @@ export class VerificationCli {
     const child = exec(
       `${this.pathToBinary} verify -i ${contractsPath || "contracts"} --license ${this.license} --api-key ${
         this.apiKey
-      } --secret ${this.secret}  --compiler-version ${this.compilerHash} --linker-version ${
-        this.linkerVersion
-      } -I node_modules --compile-all --assume-yes`,
+      } --secret ${this.secret}  --compiler-version ${this.compilerHash} --linker-version ${this.linkerVersion} -I ${
+        tryToGetNodeModules() || "node_modules"
+      } --compile-all --assume-yes`,
     );
 
     await new Promise((r, e) => {

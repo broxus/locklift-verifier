@@ -4,7 +4,7 @@ import axios from "axios";
 import * as fs from "fs-extra";
 import { ungzip } from "node-gzip";
 import tar from "tar";
-import path from "path";
+import path, { resolve } from "path";
 import { spawn } from "child_process";
 
 export const getPlatform = (): string => {
@@ -146,4 +146,14 @@ export const getCompilerHash = async ({
     fs.writeFileSync(compilerToHashMapPath, JSON.stringify(compilerToHashMap));
   }
   return compilerToHashMap[compilerVersion];
+};
+
+export const tryToGetNodeModules = (): string | undefined => {
+  const findNodeModules = require("find-node-modules");
+
+  try {
+    return resolve(findNodeModules()[0]);
+  } catch (e) {
+    return undefined;
+  }
 };
