@@ -1,6 +1,6 @@
 {
   "name": "locklift-verifier",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Locklift plugin for integration with Everscan contract verification service",
   "main": "dist/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "author": "",
   "keywords": [
-    "Everscale",
+    "everscale",
     "blockchain",
     "smart-contracts",
     "javascript",
@@ -19,7 +19,9 @@
     "dapps",
     "ethereum",
     "locklift",
-    "plugin"
+    "locklift-plugin",
+    "venom-blockchain",
+    "venom-developer-program"
   ],
   "license": "Apache-2.0",
   "dependencies": {
