@@ -9,7 +9,7 @@ import {
 } from "./utils";
 import path from "path";
 import * as fs from "fs-extra";
-import { exec, execSync } from "child_process";
+import { exec } from "child_process";
 
 export class VerificationCli {
   constructor(
@@ -21,14 +21,13 @@ export class VerificationCli {
     private readonly license: string,
   ) {}
 
-  verify = async ({ contractsPath }: { contractsPath?: string }) => {
-    const child = exec(
-      `${this.pathToBinary} verify -i ${contractsPath || "contracts"} --license ${this.license} --api-key ${
-        this.apiKey
-      } --secret ${this.secret}  --compiler-version ${this.compilerHash} --linker-version ${this.linkerVersion} -I ${
-        tryToGetNodeModules() || "node_modules"
-      } --compile-all --assume-yes`,
-    );
+  verify = async ({ contractsPath, restParams }: { contractsPath?: string; restParams: Array<string> }) => {
+    const cliCommand = `${this.pathToBinary} verify -i ${contractsPath || "contracts"} --license ${
+      this.license
+    } --api-key ${this.apiKey} --secret ${this.secret}  --compiler-version ${this.compilerHash} --linker-version ${
+      this.linkerVersion
+    } -I ${tryToGetNodeModules() || "node_modules"} --compile-all --assume-yes ${restParams.join(" ")}`;
+    const child = exec(cliCommand);
 
     await new Promise((r, e) => {
       child.stdout?.on("data", (data) => {
