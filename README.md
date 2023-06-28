@@ -43,6 +43,7 @@ const config: LockliftConfig = {
 ```shell
 npx locklift verify
 ```
+Flag `--anon-sources` can be used for avoiding source uploading, but ABI will be uploaded anyway.
 Example output
 ```text
 ✅ Verified contracts:
