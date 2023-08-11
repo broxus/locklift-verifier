@@ -26,7 +26,7 @@ npm i @broxus/locklift-verifier
 
 Inside the locklift.config.ts
 ```typescript
-import "locklift-verifier";
+import "@broxus/locklift-verifier";
 
 const config: LockliftConfig = {
     verifier: {
