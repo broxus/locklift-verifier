@@ -21,7 +21,7 @@
 ## Install
 Inside the locklift project
 ```shell
-npm i locklift-verifier
+npm i @broxus/locklift-verifier
 ```
 
 Inside the locklift.config.ts
